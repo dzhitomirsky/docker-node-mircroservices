@@ -1,0 +1,84 @@
+version: '2'
+services:
+  root:
+    build: ./root
+    environment:
+      APPLICATION_NAME: 'root'
+      NODE_ENV: "development"
+      PORT: '${SERVICE_PORT}'
+      CONSUL_HOST: "consul"
+    depends_on:
+      - registrator
+    volumes:
+      - ./root:/root
+      - /root/node_modules
+    labels:
+      SERVICE_NAME: 'root'
+    expose:
+      - '${SERVICE_PORT}'
+
+  foo:
+    build: ./foo
+    environment:
+      APPLICATION_NAME: 'foo'
+      NODE_ENV: "development"
+      PORT: '${SERVICE_PORT}'
+      CONSUL_HOST: "consul"
+    depends_on:
+      - registrator
+    volumes:
+      - ./foo:/foo
+      - /foo/node_modules
+    labels:
+      SERVICE_NAME: 'foo'
+    expose:
+      - '${SERVICE_PORT}'
+
+  bar:
+    build: ./bar
+    environment:
+      APPLICATION_NAME: 'bar'
+      NODE_ENV: "development"
+      PORT: '${SERVICE_PORT}'
+      CONSUL_HOST: "consul"
+    depends_on:
+      - registrator
+    volumes:
+      - ./bar:/bar
+      - /bar/node_modules
+    labels:
+      SERVICE_NAME: 'bar'
+    expose:
+      - '${SERVICE_PORT}'
+
+  consul:
+    command: -bootstrap -ui
+    image: gliderlabs/consul-server
+    ports:
+     - "8400:8400"
+     - "8500:8500"
+     - "8600:53/udp"
+
+  registrator:
+    image: gliderlabs/registrator
+    command: -internal consul://consul:8500
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    depends_on:
+      - consul
+
+  nginx:
+    build: ./nginx
+    ports:
+     - '${EXTERNAL_PORT}:${NGINX_PORT}'
+    depends_on:
+     - root
+     - foo
+     - bar
+    environment:
+      PORT: '${NGINX_PORT}'
+      DOCKER_CONTAINERS_HOST_EXTERNAL_PORT: ${EXTERNAL_PORT}
+    expose:
+     - '${NGINX_PORT}'
+    labels:
+      SERVICE_NAME: 'nginx'

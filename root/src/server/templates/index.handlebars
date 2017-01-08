@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campaign Editor</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://unpkg.com/react@15/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+
+    {{#each availableServices}}
+      {{#if currentApplication}}
+          <link rel="shortcut icon" type="image/x-icon" href="{{location}}/img/favicon.ico">
+          <link rel="stylesheet" href="{{location}}/css/bootstrap.css">
+      {{/if}}
+      <script src="{{location}}/static/bundle.js"></script>
+    {{/each}}
+</head>
+<body>
+<span id="root"></span>
+<script type="text/javascript">
+    window.root.renderApplication(document.getElementById("root"), {});
+</script>
+</body>
+</html>
