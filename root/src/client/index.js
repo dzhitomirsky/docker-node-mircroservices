@@ -18,12 +18,12 @@ class ApplicationContainer extends Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-6">
-            <InputGroup inputNumber={5}/>
+            {InputGroup && <InputGroup inputNumber={5}/>}
           </div>
         </div>
         <div className="row">
           <div className="col-sm-6">
-            <ButtonGroup buttonNumber={3}/>
+            {ButtonGroup && <ButtonGroup buttonNumber={3}/>}
           </div>
         </div>
       </div>
